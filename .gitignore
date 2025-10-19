@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm,macos
 
+SYSTEM_PROMPT_RULES.MD
+ARD/
+plan.md
+
 ### macOS ###
 # General
 .DS_Store

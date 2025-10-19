@@ -1,0 +1,37 @@
+# Core libraries
+fastapi
+uvicorn[standard]
+langchain
+langgraph
+openai>=1.12.0
+openai-agents
+langfuse
+nest_asyncio
+pydantic-ai[logfire]
+
+# Configuration & utilities
+python-dotenv>=1.0.0
+typing-extensions>=4.5.0
+PyYAML>=6.0.2
+
+# Database
+psycopg2-binary
+
+# Observability
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http
+
+# Data & NLP helpers
+datasets
+nltk>=3.8.1
+
+# Scheduling
+apscheduler>=3.10.4
+
+# Tooling & QA
+ruff>=0.6.9
+black>=24.8.0
+isort>=5.13.2
+mypy>=1.10.0
+pytest>=8.3.2
+pytest-cov>=4.1.0

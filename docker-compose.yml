@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: agent_db
+    environment:
+      - POSTGRES_USER=agent_user
+      - POSTGRES_PASSWORD=agent_password
+      - POSTGRES_DB=agent_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent_user -d agent_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: agent_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+    container_name: agent_api
+    depends_on:
+      db: 
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app # Mount the entire project to access orchestrator, etc.
+    environment:
+      - DATABASE_URL=postgresql://agent_user:agent_password@db:5432/agent_db
+      - PYTHONPATH=/
+
+  worker:
+    build:
+      context: ./api # Can reuse the same image as api for now
+    container_name: agent_worker
+    depends_on:
+      - db
+      - redis
+    command: ["/bin/sh", "-c", "while true; do python orchestrator/render_backlog.py; python orchestrator/knowledge_worker.py; sleep 60; done"]
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql://agent_user:agent_password@db:5432/agent_db
+      - PYTHONPATH=/
+
+volumes:
+  postgres_data:

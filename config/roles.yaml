@@ -1,0 +1,6 @@
+PM: { guard_paths: ["docs/US-*.md"] }
+DevOps: { guard_paths: ["docker-compose.yml", "tools/**", "ci/**", "api/health/**", "docs/US-*.md"] }
+BE:     { guard_paths: ["workspace/src/**", "workspace/pyproject.toml", "docs/US-*.md"] }
+FE:     { guard_paths: ["workspace/src/**", "workspace/package.json", "workspace/vite.config.*", "docs/US-*.md"] }
+ML:     { guard_paths: ["workspace/src/utils/**", "workspace/tests/**", "docs/US-*.md"] }
+QA:     { guard_paths: ["workspace/tests/**", "docs/US-*.md"] }

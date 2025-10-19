@@ -1,0 +1,23 @@
+environment: "development"
+
+cadence:
+  mirror_renderer_minutes: 5        # Tần suất worker render BACKLOG.md từ DB
+  backlog_sync_minutes: 10          # Chu kỳ đồng bộ BACKLOG ↔️ DB (nếu có external trigger)
+  metrics_flush_minutes: 15         # Ví dụ: đẩy metrics/log sang hệ thống ngoài
+
+limits:
+  max_code_test_loops: 2            # Vòng lặp Code -> Test -> Fix tối đa cho mỗi task
+  max_concurrent_tasks: 1           # Dev environment chạy tuần tự
+  llm_retry: 2                      # Số lần retry khi gọi LLM lỗi tạm thời
+
+toggles:
+  enable_room_doc_logging: true
+  enable_ci_checks: false           # Bật khi đã có pipeline CI hoàn chỉnh
+  enable_feedback_memory: true      # Lưu feedback QA vào state để dev sửa
+
+paths:
+  database_url: "sqlite:///agent_framework/dev.db"
+  artifacts_dir: "workspace/artifacts"
+  room_docs_dir: "agent_framework/docs"
+
+# Các khoá khác có thể thêm vào đây khi mở rộng (sentry, feature flags, ...).
