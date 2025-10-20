@@ -4,6 +4,8 @@
 SYSTEM_PROMPT_RULES.MD
 ARD/
 plan.md
+eval-agents/
+multi-agents-design-patterns/
 
 ### macOS ###
 # General

@@ -3,7 +3,7 @@ set -euo pipefail
 
 # This script installs dependencies based on the project type.
 
-cd agent_framework/workspace
+cd workspace
 
 if [ -f "pyproject.toml" ]; then
   echo "Installing Python dependencies..."

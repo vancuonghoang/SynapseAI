@@ -3,9 +3,9 @@ from pathlib import Path
 import glob
 import json
 
-from agent_framework.orchestrator.agents.base import Agent
-from agent_framework.orchestrator.ctb import CTB
-from agent_framework.orchestrator.guard import ensure_guarded_write
+from orchestrator.agents.base import Agent
+from orchestrator.ctb import CTB
+from orchestrator.guard import ensure_guarded_write
 
 class MLAgent(Agent):
     """ML-Quant Agent: Responsible for retrieval and context building tasks."""
@@ -16,6 +16,21 @@ class MLAgent(Agent):
 
     async def run(self, ctb: CTB) -> Dict[str, Any]:
         self._log(ctb, "INFO", f"Starting ML task: {ctb.objective}")
+
+        # Load system prompt (for policy/constraints alignment)
+        try:
+            with open("agent_framework/orchestrator/prompts/ml.system.txt", "r") as f:
+                system_prompt = f.read()
+        except FileNotFoundError:
+            system_prompt = "You are the ML Agent. Perform fast retrieval and context building; do not train heavy models."
+        # Build a small user prompt to describe retrieval scope (for logging/traceability)
+        user_prompt = (
+            f"Task Objective: {ctb.objective}\n\n"
+            f"Constraints: fast, deterministic, no heavy training. Guard paths: {ctb.guard_paths}.\n\n"
+            f"Attachments provided (truncated): AGENTS.MD[{len(ctb.attachments.get('AGENTS.MD',''))} chars],"
+            f" BACKLOG.md[{len(ctb.attachments.get('BACKLOG.md',''))} chars], ROOM.md[{len(ctb.attachments.get('ROOM.md',''))} chars]."
+        )
+        self._log(ctb, "INFO", "ML system/user prompt loaded.", meta={"system_len": len(system_prompt), "user_prompt": user_prompt[:200]})
 
         # Pattern: Heuristic Retriever
         # This agent finds relevant files to provide context to other agents.

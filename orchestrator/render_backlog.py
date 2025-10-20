@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from orchestrator.db import get_all_stories, get_tasks_for_story
 
-BACKLOG_FILE_PATH = "agent_framework/BACKLOG.md"
+BACKLOG_FILE_PATH = "BACKLOG.md"
 
 def main():
     """Fetches all data from the database and renders the BACKLOG.md file."""

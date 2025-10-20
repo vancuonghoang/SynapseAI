@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WORKSPACE_DIR="agent_framework/workspace"
+WORKSPACE_DIR="workspace"
 echo "[Typecheck] Entering workspace: $WORKSPACE_DIR"
 cd "$WORKSPACE_DIR"
 

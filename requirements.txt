@@ -1,6 +1,7 @@
 # Core libraries
 fastapi
 uvicorn[standard]
+SQLAlchemy
 langchain
 langgraph
 openai>=1.12.0
@@ -27,6 +28,7 @@ nltk>=3.8.1
 
 # Scheduling
 apscheduler>=3.10.4
+alembic>=1.13.1
 
 # Tooling & QA
 ruff>=0.6.9

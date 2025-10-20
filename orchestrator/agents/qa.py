@@ -3,9 +3,9 @@ from pathlib import Path
 import json
 import subprocess
 
-from agent_framework.orchestrator.agents.base import Agent
-from agent_framework.orchestrator.ctb import CTB
-from agent_framework.orchestrator.guard import ensure_guarded_write
+from orchestrator.agents.base import Agent
+from orchestrator.ctb import CTB
+from orchestrator.guard import ensure_guarded_write
 
 class QAAgent(Agent):
     """QA Agent: Generates and runs tests to ensure code quality."""
@@ -26,23 +26,15 @@ class QAAgent(Agent):
         except FileNotFoundError:
             system_prompt = "You are a QA Agent. Your goal is to generate and run tests."
 
+        acceptance_lines = "\n- ".join(ctb.acceptance) if ctb.acceptance else "(No acceptance criteria provided)"
         user_prompt = (
-            f"""Your task is to generate python pytest code for a test file named 'workspace/tests/test_{ctb.story_id.lower()}.py'.
-
-"""
-            f"""The tests must verify that the functionality described in the objective has been met according to the following acceptance criteria.
-
-"""
-            f"""### Original Task Objective ###
-{ctb.objective}
-
-"""
-            f"""### MANDATORY Acceptance Criteria to Verify ###
-"""
-            f"""- {"\n- ".join(ctb.acceptance)}
-
-"""
-            f"""Generate a complete, runnable pytest file. Do not include any explanatory text outside of the code itself."""
+            f"Your task is to generate python pytest code for a test file named 'workspace/tests/test_{ctb.story_id.lower()}.py'.\n\n"
+            "The tests must verify that the functionality described in the objective has been met according to the following acceptance criteria.\n\n"
+            "### Original Task Objective ###\n"
+            f"{ctb.objective}\n\n"
+            "### MANDATORY Acceptance Criteria to Verify ###\n"
+            f"- {acceptance_lines}\n\n"
+            "Generate a complete, runnable pytest file. Do not include any explanatory text outside of the code itself."
         )
 
         self._log(ctb, "INFO", "Calling LLM to generate test cases.")

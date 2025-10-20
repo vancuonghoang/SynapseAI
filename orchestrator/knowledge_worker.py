@@ -5,6 +5,11 @@ from collections import Counter
 # Ensure the parent directory is in the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from sqlalchemy import text
+
+# Ensure the parent directory is in the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from orchestrator.db import get_db_connection
 
 def main():
@@ -12,16 +17,15 @@ def main():
     print("\n--- Running Knowledge Distillation Worker ---")
     try:
         with get_db_connection() as conn:
-            cursor = conn.cursor()
             # Find agents that produce the most errors
-            cursor.execute("SELECT role FROM logs WHERE level = 'ERROR'")
-            errors = cursor.fetchall()
+            result = conn.execute(text("SELECT role FROM logs WHERE level = 'ERROR'"))
+            errors = result.fetchall()
             
             if not errors:
                 print("No ERROR logs found. The system is stable.")
                 return
 
-            error_counts = Counter([row['role'] for row in errors])
+            error_counts = Counter([row[0] for row in errors])
             
             print("Found the following error patterns:")
             for role, count in error_counts.most_common():

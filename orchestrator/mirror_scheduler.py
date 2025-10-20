@@ -4,9 +4,9 @@ from typing import Any, Dict
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from agent_framework.orchestrator.mirror_worker import render_backlog
+from orchestrator.mirror_worker import render_backlog
 
-CONFIG_PATH = Path("agent_framework/config/app.yaml")
+CONFIG_PATH = Path("config/app.yaml")
 
 
 def _load_interval_minutes(default: int = 5) -> int:

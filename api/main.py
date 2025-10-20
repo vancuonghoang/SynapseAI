@@ -2,12 +2,6 @@ import asyncio
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from typing import List, Dict, Any
 
-# Adjust path to import from the parent directory
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from orchestrator.db import get_all_stories, get_story_by_id, get_tasks_for_story, get_artifacts_for_story
 from orchestrator.graph import run_story_workflow
 

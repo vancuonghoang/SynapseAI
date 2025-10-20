@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from agent_framework.orchestrator.ctb import CTB
-from agent_framework.orchestrator.db import create_log_entry
+from orchestrator.ctb import CTB
+from orchestrator.db import create_log_entry
 
 class Agent(ABC):
     """Base class for all agents in the system."""
@@ -27,8 +27,9 @@ class Agent(ABC):
             
             timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
             log_header = f"\n---\n`{timestamp}` | **{self.ROLE} Agent** | Task: `{ctb.task_id}` | Status: `{level}`\n"
-            
-            log_content = f"> {msg.replace('\n', '\n> ')}\n"
+
+            formatted_msg = msg.replace("\n", "\n> ")
+            log_content = f"> {formatted_msg}\n"
 
             if meta:
                 meta_str = json.dumps(meta, indent=2)

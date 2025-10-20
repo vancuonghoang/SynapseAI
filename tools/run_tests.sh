@@ -3,7 +3,7 @@ set -euo pipefail
 
 # This script acts as a standardized test runner for the project.
 
-WORKSPACE_DIR="agent_framework/workspace"
+WORKSPACE_DIR="workspace"
 
 echo "[Test Runner] Entering workspace: $WORKSPACE_DIR"
 cd "$WORKSPACE_DIR"

@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict
 
-from agent_framework.orchestrator.db import get_all_stories, get_tasks_for_story
+from orchestrator.db import get_all_stories, get_tasks_for_story
 
 
 def _format_story_section(story: Dict[str, str], tasks: List[Dict[str, str]]) -> List[str]:
@@ -33,7 +33,7 @@ def _format_story_section(story: Dict[str, str], tasks: List[Dict[str, str]]) ->
     return lines
 
 
-def render_backlog(output_path: str = "agent_framework/BACKLOG.md") -> Path:
+def render_backlog(output_path: str = "BACKLOG.md") -> Path:
     """Render BACKLOG.md from the canonical database snapshot."""
     generated_at = datetime.now(timezone.utc).isoformat()
     stories = get_all_stories()

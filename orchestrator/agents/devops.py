@@ -2,10 +2,10 @@ from typing import Dict, Any
 from pathlib import Path
 import subprocess
 
-from agent_framework.orchestrator.agents.base import Agent
-from agent_framework.orchestrator.ctb import CTB
-from agent_framework.orchestrator.guard import ensure_guarded_write
-from agent_framework.orchestrator.db import create_artifact
+from orchestrator.agents.base import Agent
+from orchestrator.ctb import CTB
+from orchestrator.guard import ensure_guarded_write
+from orchestrator.db import create_artifact
 
 class DevOpsAgent(Agent):
     """DevOps Agent: Manages infrastructure, CI/CD, and tooling scripts."""

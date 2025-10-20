@@ -2,10 +2,10 @@ from typing import Dict, Any
 from pathlib import Path
 import subprocess
 
-from agent_framework.orchestrator.agents.base import Agent
-from agent_framework.orchestrator.ctb import CTB
-from agent_framework.orchestrator.guard import ensure_guarded_write
-from agent_framework.orchestrator.db import create_artifact
+from orchestrator.agents.base import Agent
+from orchestrator.ctb import CTB
+from orchestrator.guard import ensure_guarded_write
+from orchestrator.db import create_artifact
 
 class FEAgent(Agent):
     """Frontend Agent: Implements UI components based on specifications."""
@@ -18,7 +18,8 @@ class FEAgent(Agent):
         self._log(ctb, "INFO", f"Starting frontend task: {ctb.objective}")
 
         # Define a logical file path for the component
-        target_file_path = f"workspace/src/components/{ctb.story_id.lower()}_dashboard.tsx"
+        # Per FE prompt, all UI code lives under workspace/src/ui/
+        target_file_path = f"workspace/src/ui/components/{ctb.story_id.lower()}_dashboard.tsx"
 
         try:
             with open(f"agent_framework/orchestrator/prompts/{self.ROLE.lower()}.system.txt", "r") as f:
@@ -27,23 +28,17 @@ class FEAgent(Agent):
             self._log(ctb, "WARN", f"{self.ROLE.lower()}.system.txt not found. Using fallback prompt.")
             system_prompt = "You are a Frontend Agent. Your goal is to implement UI components."
 
+        acceptance_lines = "\n- ".join(ctb.acceptance) if ctb.acceptance else "(No acceptance criteria provided)"
+        constraints_text = "\n".join(str(c) for c in ctb.constraints) if ctb.constraints else "(No constraints provided)"
         user_prompt = (
-            f"""Please generate the React/TypeScript code for the file '{target_file_path}'.
-
-"""
-            f"""### OBJECTIVE ###
-{ctb.objective}
-
-"""
-            f"""### CONSTRAINTS ###
-{ctb.constraints}
-
-"""
-            f"""### ACCEPTANCE CRITERIA ###
-- {"\n- ".join(ctb.acceptance)}
-
-"""
-            f"""Generate a complete, runnable React component file. Do not include any explanatory text."""
+            f"Please generate the React/TypeScript code for the file '{target_file_path}'.\n\n"
+            "### OBJECTIVE ###\n"
+            f"{ctb.objective}\n\n"
+            "### CONSTRAINTS ###\n"
+            f"{constraints_text}\n\n"
+            "### ACCEPTANCE CRITERIA ###\n"
+            f"- {acceptance_lines}\n\n"
+            "Generate a complete, runnable React component file. Do not include any explanatory text."
         )
 
         self._log(ctb, "INFO", f"Calling LLM to generate code for '{target_file_path}'.")
